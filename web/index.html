@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>credential-lens</title>
+<meta name="description" content="Inspect and validate Open Badges 3.0 / W3C Verifiable Credentials. Runs entirely in your browser.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/>
+      </svg>
+      credential-lens
+    </div>
+    <span class="tag">Open Badges 3.0 · W3C VC</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro">
+    <h1>Is this credential actually any good?</h1>
+    <p>Paste a credential below. Everything runs in your browser, nothing is uploaded.</p>
+  </section>
+
+  <section class="panel">
+    <div class="samples">
+      <span>Try:</span>
+      <div id="sampleBtns" class="chips"></div>
+    </div>
+
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/json,.json" hidden>
+      <span class="drop-title">Drop a .json credential here</span>
+      <span class="drop-sub">or click to choose a file</span>
+    </label>
+
+    <label class="lbl" for="input">Credential JSON</label>
+    <textarea id="input" spellcheck="false" placeholder='{ "@context": ["https://w3id.org/vc/ob/vocab.html"], "type": ["VerifiableCredential", "OpenBadgeCredential"] }'></textarea>
+
+    <div class="actions">
+      <button id="run" class="btn primary">Validate</button>
+      <button id="clear" class="btn">Clear</button>
+      <span class="spacer"></span>
+      <span class="hint" id="status"></span>
+    </div>
+  </section>
+
+  <section id="results" hidden>
+    <div class="score-card" id="scoreCard">
+      <div class="gauge">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="g-track" cx="60" cy="60" r="52"></circle>
+          <circle class="g-fill" id="gaugeFill" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="gauge-text">
+          <b id="score">0</b>
+          <span id="band">&nbsp;</span>
+        </div>
+      </div>
+      <div class="score-meta">
+        <div class="verdict" id="verdict"></div>
+        <div class="counts" id="counts"></div>
+        <p class="caveat">
+          Structure and proof presence were checked. The signature was <b>not</b>
+          cryptographically verified, because that needs the issuer's public key.
+        </p>
+      </div>
+    </div>
+
+    <div id="findings"></div>
+
+    <div class="panel tree-panel">
+      <div class="tree-head">
+        <h2>Parsed credential</h2>
+        <button class="btn tiny" id="copyBtn">Copy JSON</button>
+      </div>
+      <pre id="tree"></pre>
+    </div>
+  </section>
+
+  <section class="about">
+    <h2>What this checks</h2>
+    <ul>
+      <li><b>Required structure</b> — context, types, id, awarder, subject, achievement, criteria, dates</li>
+      <li><b>Proof presence</b> — proof type, cryptosuite, verification method and proofValue</li>
+      <li><b>Placeholder signatures</b> — a fake signature is worse than none, so it is an error</li>
+      <li><b>Lifecycle</b> — issue and expiry dates, expiry ordering, credentials already lapsed</li>
+      <li><b>Revocation</b> — whether a status list exists so the credential can be withdrawn</li>
+      <li><b>Substance</b> — criteria narrative quality and framework alignment</li>
+    </ul>
+    <p class="fine">
+      This judges structure, not truth. A perfectly formed credential can still be worthless.
+      Use it to catch malformed documents before you publish them, not as a trust signal.
+    </p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>credential-lens — zero dependencies, works offline</span>
+  <span>MIT licensed</span>
+</footer>
+
+<script src="../src/validate.js"></script>
+<script src="../src/samples.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

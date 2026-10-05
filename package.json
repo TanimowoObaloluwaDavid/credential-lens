@@ -1,0 +1,34 @@
+{
+  "name": "credential-lens",
+  "version": "1.0.0",
+  "description": "Inspect and validate Open Badges 3.0 / W3C Verifiable Credentials. Zero dependencies, works offline.",
+  "keywords": [
+    "open-badges",
+    "verifiable-credentials",
+    "w3c-vc",
+    "credentials",
+    "microcredentials",
+    "validation"
+  ],
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "src/validate.js",
+  "bin": {
+    "credlens": "bin/credlens.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "web"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:web": "node test/web-smoke.js",
+    "test:all": "npm test && npm run test:web",
+    "demo": "node bin/credlens.js demo",
+    "samples": "node scripts/write-samples.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

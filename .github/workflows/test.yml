@@ -1,0 +1,61 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["18", "20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Unit tests
+        run: node --test test/validate.test.js test/cli.test.js
+
+  cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Write sample fixtures
+        run: node scripts/write-samples.js
+      - name: Validate the well-formed sample
+        run: node bin/credlens.js validate samples/well-formed.json --no-color
+      - name: The unsigned sample must fail
+        run: |
+          if node bin/credlens.js validate samples/no-proof.json --no-color; then
+            echo "::error::no-proof should have exited non-zero"
+            exit 1
+          fi
+      - name: The placeholder signature must fail
+        run: |
+          if node bin/credlens.js validate samples/placeholder-proof.json --no-color; then
+            echo "::error::placeholder-proof should have exited non-zero"
+            exit 1
+          fi
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+          echo "CHROME_PATH=$(which chromium-browser || which chromium || which google-chrome)" >> "$GITHUB_ENV"
+      - name: Browser smoke test
+        run: node test/web-smoke.js
