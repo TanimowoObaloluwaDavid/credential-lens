@@ -19,13 +19,15 @@
   "files": [
     "bin",
     "src",
-    "web"
+    "web",
+    "assets"
   ],
   "scripts": {
     "test": "node --test test/*.test.js",
     "test:web": "node test/web-smoke.js",
     "test:all": "npm test && npm run test:web",
     "demo": "node bin/credlens.js demo",
+    "demo:gif": "node scripts/make-demo-gif.js",
     "samples": "node scripts/write-samples.js"
   },
   "engines": {

@@ -12,6 +12,8 @@ finds those problems before they reach a learner.
 - **Same engine everywhere.** The CLI and the browser load the same `src/validate.js`.
 - **Honest about its limits.** It never claims to have verified a signature.
 
+![The web UI validating six credentials in turn](assets/demo.gif)
+
 ## Install
 
 ```bash
@@ -162,6 +164,15 @@ npm run test:all
 
 No test framework is installed. The browser test uses Node's built-in
 `WebSocket` to drive Chrome directly.
+
+Regenerating the README demo GIF (needs Node 22+ and ffmpeg):
+
+```bash
+npm run demo:gif          # writes assets/demo.gif
+```
+
+It drives the real page in headless Chrome, clicks each sample in turn and
+encodes the frames through ffmpeg's two-pass palette workflow.
 
 ## Standards
 
