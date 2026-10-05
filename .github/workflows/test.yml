@@ -51,7 +51,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # The browser harness drives Chrome over the DevTools Protocol using the
+          # global WebSocket, which only exists from Node 22 onwards. The library
+          # itself still supports Node 18; that is covered by the unit matrix.
+          node-version: "22"
       - name: Install Chrome
         run: |
           sudo apt-get update

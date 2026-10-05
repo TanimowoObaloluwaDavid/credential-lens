@@ -14,6 +14,20 @@ const CHROME = process.env.CHROME_PATH ||
 const PAGE = "file:///" + path.resolve(__dirname, "..", "web", "index.html").replace(/\\/g, "/");
 const PORT = 9333 + (process.pid % 500);
 
+if (typeof WebSocket === "undefined") {
+  console.error(
+    "This harness needs the global WebSocket, which Node provides from v22 onwards.\n" +
+    "You are on " + process.version + ". Run it with Node 22 or newer:\n" +
+    "  npx -y node@22 test/web-smoke.js"
+  );
+  process.exit(2);
+}
+
+if (!fs.existsSync(CHROME)) {
+  console.error("Chrome not found at: " + CHROME + "\nSet CHROME_PATH to override.");
+  process.exit(2);
+}
+
 let pass = 0, fail = 0;
 const failures = [];
 
